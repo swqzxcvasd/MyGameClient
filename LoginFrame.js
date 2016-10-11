@@ -18,12 +18,14 @@ var btn_WX_Login = null;
 
 
 
-
+/*
 function joinLobbyRoom()
 {
     if (sfs.lastJoinedRoom == null || sfs.lastJoinedRoom.name != LOBBY_ROOM_NAME)
         sfs.send(new SFS2X.Requests.System.JoinRoomRequest(LOBBY_ROOM_NAME));
 }
+*/
+
 
 
 function onConnection(event)
@@ -120,21 +122,13 @@ function onLogin(event)
         sfs.send(new SFS2X.Requests.System.SubscribeRoomGroupRequest(GAME_ROOMS_GROUP_NAME));
     }
 
-    joinLobbyRoom();
+//*    joinLobbyRoom();
     //创建新场景
     var roomScene=new RoomScene();
     //替换场景
     cc.director.runScene(roomScene);
 
 
-
-    // Check if the "game" group is already subscribed;
-    // if not, subscribe it
-//    if (!sfs.roomManager.containsGroup(GAME_ROOMS_GROUP_NAME))
-//        sfs.send(new SFS2X.Requests.System.SubscribeRoomGroupRequest(GAME_ROOMS_GROUP_NAME));
-
-    // Join lobby room
-//*    joinLobbyRoom();
 
     // Private Chat system
 //    currentPrivateChat = -1;
@@ -148,48 +142,6 @@ function onLogout(event)
 
 //    enablePrivateChat(-1);
 //    onRoomSelected(null);
-}
-
-
-function onRoomJoinError(event)
-{
-    cc.log("Room join error: " + event.errorMessage + " (code: " + event.errorCode + ")", true);
-
-    // Reset roomlist selection
-//    onRoomSelected(null);
-}
-
-function onRoomJoin(event)
-{
-    cc.log("Room joined: " + event.room);
-
-    // Switch view
- //   if (event.room.name == LOBBY_ROOM_NAME)
-//    {
-//        inGame = false;
-
- //       $("#roomLb").html(event.room.name);
-//        setView("lobby", true);
-
-//        writeToLobbyChatArea("<em>You entered the '"+event.room.name+"'</em>");
-
-        // Remove Game Popup
- //       removeGamePopUp();
-  //  }
-  //  else
-  //  {
-   //     inGame = true;
-
-    //    setView("game", true);
-
-     //   writeToGameChatArea("<em>You entered the '"+event.room.name+"'</em>");
-
-        // Initialize the game
-   //     initGame();
-
-        // Reset roomlist selection
-     //   onRoomSelected(null);
-   // }
 }
 
 
@@ -212,7 +164,7 @@ var LoginFrame = cc.Layer.extend({
 
         // Create configuration object
         var config = {};
-        config.host = "192.168.1.130";
+        config.host = "127.0.0.1";
         config.port = 8888;
         config.zone = "BasicExamples";
         config.debug = false;
@@ -229,6 +181,10 @@ var LoginFrame = cc.Layer.extend({
 
         sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, onRoomJoinError, this);
         sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN, onRoomJoin, this);
+
+        sfs.addEventListener(SFS2X.SFSEvent.ROOM_ADD, onRoomCreated, this);
+        sfs.addEventListener(SFS2X.SFSEvent.ROOM_CREATION_ERROR, onRoomCreationError, this);
+
 
 
 
